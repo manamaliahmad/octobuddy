@@ -12,7 +12,12 @@ when you click them. Pick your pet in the popup — no reinstall needed.
 - **🐝 Bee (Buzzie)** — flapping wings, wiggling antennae, fast hover
 - **🦎 Lizard (Lizzy)** — swaying tail, giant eyes, tongue flick every few seconds
 - **🤖 MicroDuck robot (Ducky)** — the real MicroDuck photo itself (background
-  cut out), head+neck tilts in robotic steps
+  cut out), cut into moving parts: waddling body, alternating stepping legs,
+  ticking head, pecking beak — just like the real robot's walk
+
+v2.0.2 update: MicroDuck's legs step separately with a side-to-side waddle,
+and changing pets in the popup now updates every open tab instantly (no page
+refresh needed).
 
 v2.0.1 update: MicroDuck now uses the actual product photo instead of a
 drawing — it looks exactly like the real robot. (The other three pets are

@@ -19,6 +19,24 @@
     });
   }
 
+  // Push the new pet to every open tab instantly, even tabs whose content
+  // script went stale after an extension reload (they need no page refresh).
+  function pushToTabs() {
+    try {
+      if (!chrome.tabs || !chrome.scripting) return;
+      chrome.tabs.query({}, function (tabs) {
+        tabs.forEach(function (tab) {
+          if (!tab || !tab.id) return;
+          try {
+            chrome.scripting.executeScript(
+              { target: { tabId: tab.id }, files: ['pets.js', 'content.js'] },
+              function () { if (chrome.runtime.lastError) { /* chrome:// pages etc. */ } });
+          } catch (e) {}
+        });
+      });
+    } catch (e) {}
+  }
+
   function save() {
     chrome.storage.sync.set({
       enabled: enabledEl.checked,
@@ -55,6 +73,7 @@
       if (!cur || DEFAULT_NAMES.indexOf(cur) !== -1) nameEl.value = PET_NAMES[currentPet];
       markPet();
       save();
+      pushToTabs();
     });
   });
 })();
