@@ -1,8 +1,8 @@
 /* OctoBuddy popup — reads/saves settings in chrome.storage.sync */
 (function () {
   var DEF = { enabled: true, size: 90, speed: 5, name: 'Ollie', pet: 'octopus' };
-  var PET_NAMES = { octopus: 'Ollie', bee: 'Buzzie', lizard: 'Lizzy', duck: 'Ducky' };
-  var DEFAULT_NAMES = ['Ollie', 'Buzzie', 'Lizzy', 'Ducky'];
+  var PET_NAMES = { octopus: 'Ollie', bee: 'Buzzie', lizard: 'Lizzy' };
+  var DEFAULT_NAMES = ['Ollie', 'Buzzie', 'Lizzy'];
   var enabledEl = document.getElementById('enabled');
   var nameEl = document.getElementById('petName');
   var sizeEl = document.getElementById('size');
@@ -21,6 +21,8 @@
 
   // Push the new pet to every open tab instantly, even tabs whose content
   // script went stale after an extension reload (they need no page refresh).
+  // CSS goes first so the injected script and its styles can never mismatch
+  // (a mismatch is what once scattered one pet into loose pieces).
   function pushToTabs() {
     try {
       if (!chrome.tabs || !chrome.scripting) return;
@@ -28,9 +30,15 @@
         tabs.forEach(function (tab) {
           if (!tab || !tab.id) return;
           try {
-            chrome.scripting.executeScript(
-              { target: { tabId: tab.id }, files: ['pets.js', 'content.js'] },
-              function () { if (chrome.runtime.lastError) { /* chrome:// pages etc. */ } });
+            chrome.scripting.insertCSS(
+              { target: { tabId: tab.id }, files: ['pet.css'] },
+              function () {
+                try {
+                  chrome.scripting.executeScript(
+                    { target: { tabId: tab.id }, files: ['pets.js', 'content.js'] },
+                    function () { if (chrome.runtime.lastError) { /* chrome:// pages etc. */ } });
+                } catch (e) {}
+              });
           } catch (e) {}
         });
       });
@@ -56,7 +64,7 @@
     speedEl.value = items.speed;
     sizeVal.textContent = items.size + 'px';
     speedVal.textContent = items.speed;
-    currentPet = items.pet || 'octopus';
+    currentPet = PET_NAMES[items.pet] ? items.pet : 'octopus';
     markPet();
   });
 

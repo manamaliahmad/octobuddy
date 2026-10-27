@@ -37,11 +37,10 @@
     <button class="light petbtn sel" data-pet="octopus">🐙 Octopus</button>
     <button class="light petbtn" data-pet="bee">🐝 Bee</button>
     <button class="light petbtn" data-pet="lizard">🦎 Lizard</button>
-    <button class="light petbtn" data-pet="duck">🤖 MicroDuck</button>
   </div>
   <div class="feats">
     <div class="feat"><b>Follows the cursor</b>Smooth easing + pupils that look toward it.</div>
-    <div class="feat"><b>Alive</b>Blinking eyes, flapping bee wings, wagging lizard tail, ticking robot head — 4 pets, each with its own moves.</div>
+    <div class="feat"><b>Alive</b>Blinking eyes, flapping bee wings, wagging lizard tail, ticking robot head — 3 pets, each with its own moves.</div>
     <div class="feat"><b>Idle sleep</b>20s still → Zzz mode. Move to wake it.</div>
     <div class="feat"><b>Click love</b>Click the pet → jump + hearts + bubble.</div>
   </div>
@@ -59,7 +58,7 @@
   function renderDemoPet(key) {
     currentPet = key;
     var d = OCTO_PETS[key];
-    pet.classList.remove('pet-octopus', 'pet-bee', 'pet-lizard', 'pet-duck');
+    pet.classList.remove('pet-octopus', 'pet-bee', 'pet-lizard');
     pet.classList.add('pet-' + key);
     pet.innerHTML =
       '<div class="ob-tilt"><div class="ob-bob">' + d.svg +

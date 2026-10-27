@@ -157,35 +157,5 @@
   0%, 92%, 100% { opacity: 0; }
   94%, 96% { opacity: 1; }
 }
-/* MicroDuck robot: the real photo, cut into moving parts — waddling body,
-   alternating stepping legs, ticking head, pecking beak (like the real one) */
-#octobuddy-pet.pet-duck .ob-bob { animation-duration: 2.8s; }
-#octobuddy-pet .ob-duckphoto { position: relative; width: 100%; aspect-ratio: 1 / 1; animation: obDuckWaddle 1.1s ease-in-out infinite; }
-#octobuddy-pet .ob-duckphoto img { position: absolute; height: auto; }
-#octobuddy-pet .ob-duckhead-img { left: 0; top: 0; width: 100%; transform-origin: 50% 100%; animation: obDuckHead 2.4s steps(4) infinite; }
-#octobuddy-pet .ob-duckbeak-img { left: 0; top: 15%; width: 40%; transform-origin: 100% 50%; animation: obDuckPeck 6s infinite; }
-#octobuddy-pet .ob-ducktorso-img { left: 0; top: 46%; width: 100%; }
-#octobuddy-pet .ob-duckleg-l { left: 25.6%; top: 78.1%; width: 21.6%; transform-origin: 50% 0%; animation: obDuckStep 1.1s ease-in-out infinite; }
-#octobuddy-pet .ob-duckleg-r { left: 44.7%; top: 78.1%; width: 19.7%; transform-origin: 50% 0%; animation: obDuckStep 1.1s ease-in-out infinite; animation-delay: 0.55s; }
-@keyframes obDuckWaddle {
-  0%, 100% { transform: translateX(-3%) rotate(-2deg); }
-  50% { transform: translateX(3%) rotate(2deg); }
-}
-@keyframes obDuckStep {
-  0%, 100% { transform: rotate(-8deg); }
-  30% { transform: rotate(12deg); }
-  60% { transform: rotate(-4deg); }
-}
-@keyframes obDuckPeck {
-  0%, 90%, 100% { transform: rotate(0deg); }
-  93% { transform: rotate(-12deg); }
-  96% { transform: rotate(0deg); }
-}
-/* Sleeping duck stands still (only the slow sleep float continues) */
-#octobuddy-pet.sleeping .ob-duckphoto, #octobuddy-pet.sleeping .ob-duckphoto img { animation-play-state: paused; }
-@keyframes obDuckHead {
-  from { transform: rotate(-4deg); }
-  to { transform: rotate(4deg); }
-}
 /* Jump must win over per-pet float while it plays */
 #octobuddy-pet.ob-jump .ob-bob { animation: obJump 0.6s ease; }

@@ -6,34 +6,22 @@ when you click them. Pick your pet in the popup — no reinstall needed.
 
 ![OctoBuddy plush](assets/octopus-plush.jpg)
 
-## What's new in v2.0.0 — 4 pets!
+## What's new in v2.0.3
 
 - **🐙 Octopus (Ollie)** — the original: swaying tentacles, bobbing float
 - **🐝 Bee (Buzzie)** — flapping wings, wiggling antennae, fast hover
 - **🦎 Lizard (Lizzy)** — swaying tail, giant eyes, tongue flick every few seconds
-- **🤖 MicroDuck robot (Ducky)** — the real MicroDuck photo itself (background
-  cut out), cut into moving parts: waddling body, alternating stepping legs,
-  ticking head, pecking beak — just like the real robot's walk
 
-v2.0.2 update: MicroDuck's legs step separately with a side-to-side waddle,
-and changing pets in the popup now updates every open tab instantly (no page
-refresh needed).
-
-v2.0.1 update: MicroDuck now uses the actual product photo instead of a
-drawing — it looks exactly like the real robot. (The other three pets are
-still SVG drawings in the style of their photos, so their parts can move.)
-
-Every pet is drawn in SVG in the style of its reference photo, so every part
-can move — a flat photo can't flap wings or wag a tail. Switch pets anytime
-from the popup; the pet on your open pages changes live.
+Three pets, each with its own moves. Switching pets in the popup updates
+every open tab instantly.
 
 ## Features
 
 - **Follows your cursor** on every page, with smooth cute lag (not a robotic snap)
-- **4 pets to choose from** (octopus, bee, lizard, MicroDuck robot) — each with
+- **3 pets to choose from** (octopus, bee, lizard) — each with
   its own moves, switchable live from the popup
 - **Alive:** blinking eyes, swaying tentacles, flapping wings, wagging tail,
-  ticking robot head, bobbing float, tilt toward movement
+  bobbing float, tilt toward movement
 - **Idle sleep:** no mouse movement for 20 seconds → Zzz mode, wakes on movement
 - **Click love:** click the pet → jump + heart burst + speech bubble
 - **Popup controls:** pet chooser, on/off, pet name, size (60–140px), follow speed

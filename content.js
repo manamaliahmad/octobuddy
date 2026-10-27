@@ -7,6 +7,11 @@
   var DEF = { enabled: true, size: 90, speed: 5, name: 'Ollie', pet: 'octopus' };
   var S = Object.assign({}, DEF);
 
+  // Never leave two pets on a page: an extension reload orphans the old pet
+  // div in the DOM, so remove any leftover before creating a fresh one.
+  var stalePet = document.getElementById('octobuddy-pet');
+  if (stalePet) stalePet.remove();
+
   var pet = document.createElement('div');
   pet.id = 'octobuddy-pet';
   var tiltEl = null, looks = [], bubble = null, bubbleTimer = null;
@@ -18,7 +23,7 @@
 
   function renderPet() {
     var key = (window.OCTO_PETS && OCTO_PETS[S.pet]) ? S.pet : 'octopus';
-    pet.classList.remove('pet-octopus', 'pet-bee', 'pet-lizard', 'pet-duck');
+    pet.classList.remove('pet-octopus', 'pet-bee', 'pet-lizard');
     pet.classList.add('pet-' + key);
     pet.innerHTML =
       '<div class="ob-tilt"><div class="ob-bob">' + petDef().svg +
