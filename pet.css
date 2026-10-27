@@ -1,0 +1,115 @@
+/* OctoBuddy pet styles — injected on every page by content.js */
+#octobuddy-pet {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 2147483647;
+  width: 90px;
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 10px 16px rgba(20, 40, 70, 0.25));
+  user-select: none;
+  -webkit-user-select: none;
+}
+#octobuddy-pet .ob-bob { animation: obBob 3s ease-in-out infinite; }
+#octobuddy-pet.sleeping .ob-bob { animation-duration: 5s; }
+
+@keyframes obBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+#octobuddy-pet.ob-jump .ob-bob { animation: obJump 0.6s ease; }
+@keyframes obJump {
+  0% { transform: translateY(0); }
+  40% { transform: translateY(-26px) scale(1.05); }
+  100% { transform: translateY(0); }
+}
+
+#octobuddy-pet svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* Tentacle sway */
+#octobuddy-pet .ob-tent path {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: obSway 2.2s ease-in-out infinite alternate;
+}
+#octobuddy-pet .ob-tent path:nth-child(2) { animation-delay: 0.2s; }
+#octobuddy-pet .ob-tent path:nth-child(3) { animation-delay: 0.4s; }
+#octobuddy-pet .ob-tent path:nth-child(4) { animation-delay: 0.6s; }
+#octobuddy-pet .ob-tent path:nth-child(5) { animation-delay: 0.8s; }
+@keyframes obSway {
+  from { transform: rotate(-6deg); }
+  to { transform: rotate(6deg); }
+}
+
+/* Blinking eyelids */
+#octobuddy-pet .ob-lid {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: obBlink 4.8s infinite;
+}
+@keyframes obBlink {
+  0%, 93%, 100% { transform: scaleY(0); }
+  96% { transform: scaleY(1); }
+}
+#octobuddy-pet.sleeping .ob-lid { animation: none; transform: scaleY(1); }
+#octobuddy-pet.ob-happy .ob-eye { transform: scale(1.15); }
+#octobuddy-pet .ob-eye {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+/* Sleep Zzz */
+#octobuddy-pet .ob-zzz { display: none; }
+#octobuddy-pet.sleeping .ob-zzz { display: block; }
+#octobuddy-pet .ob-zzz span {
+  position: absolute;
+  right: 6px;
+  color: #5b7fa6;
+  font-family: inherit;
+  font-weight: 700;
+  opacity: 0;
+  animation: obZzz 2.4s ease-out infinite;
+}
+#octobuddy-pet .ob-zzz span:nth-child(1) { top: -6px; font-size: 13px; animation-delay: 0s; }
+#octobuddy-pet .ob-zzz span:nth-child(2) { top: -16px; font-size: 18px; animation-delay: 0.8s; }
+#octobuddy-pet .ob-zzz span:nth-child(3) { top: -28px; font-size: 23px; animation-delay: 1.6s; }
+@keyframes obZzz {
+  0% { transform: translateY(6px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateY(-14px); opacity: 0; }
+}
+
+/* Click hearts + speech bubble */
+#octobuddy-pet .ob-heart {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  color: #ff5c8a;
+  font-size: 18px;
+  pointer-events: none;
+  animation: obFloat 1s ease-out forwards;
+}
+@keyframes obFloat {
+  to { transform: translateY(-64px) scale(1.35); opacity: 0; }
+}
+#octobuddy-pet .ob-bubble {
+  position: absolute;
+  left: 50%;
+  top: -44px;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #1c2420;
+  border-radius: 999px;
+  padding: 6px 13px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: Inter, system-ui, sans-serif;
+  box-shadow: 0 6px 18px rgba(20, 40, 70, 0.22);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+#octobuddy-pet .ob-bubble.show { opacity: 1; }
