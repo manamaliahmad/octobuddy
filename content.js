@@ -1,47 +1,40 @@
-/* OctoBuddy — content script: injects the pet on every page and makes it follow the cursor. */
+/* OctoBuddy — content script: injects the pet on every page and makes it follow the cursor.
+   Pet art lives in pets.js (OCTO_PETS); this file is the shared engine. */
 (function () {
   if (window.__octoBuddyLoaded) return;
   window.__octoBuddyLoaded = true;
 
-  var DEF = { enabled: true, size: 90, speed: 5, name: 'Ollie' };
+  var DEF = { enabled: true, size: 90, speed: 5, name: 'Ollie', pet: 'octopus' };
   var S = Object.assign({}, DEF);
 
   var pet = document.createElement('div');
   pet.id = 'octobuddy-pet';
-  pet.innerHTML =
-    '<div class="ob-tilt"><div class="ob-bob">' +
-    '<svg viewBox="0 0 120 112" xmlns="http://www.w3.org/2000/svg">' +
-    '<defs><linearGradient id="obHead" x1="0" y1="0" x2="0" y2="1">' +
-    '<stop offset="0%" stop-color="#ffffff"/><stop offset="45%" stop-color="#eaf4ff"/>' +
-    '<stop offset="100%" stop-color="#a8d0f2"/></linearGradient></defs>' +
-    '<g class="ob-tent" stroke="#9cc8ef" stroke-width="13" stroke-linecap="round" fill="none">' +
-    '<path d="M18 66 Q10 86 16 100"/><path d="M38 72 Q32 92 38 104"/>' +
-    '<path d="M60 74 Q60 94 60 106"/><path d="M82 72 Q88 92 82 104"/>' +
-    '<path d="M102 66 Q110 86 104 100"/></g>' +
-    '<path d="M10 62 C10 26 30 12 60 12 C90 12 110 26 110 62 C110 70 104 72 100 68 ' +
-    'C96 74 88 74 84 68 C80 74 72 74 68 68 C64 74 56 74 52 68 C48 74 40 74 36 68 ' +
-    'C32 74 24 74 20 68 C16 72 10 70 10 62 Z" fill="url(#obHead)"/>' +
-    '<g class="ob-eye"><g class="ob-look"><circle cx="42" cy="48" r="10" fill="#14141e"/>' +
-    '<circle cx="39" cy="45" r="3.5" fill="#fff"/></g></g>' +
-    '<g class="ob-eye"><g class="ob-look"><circle cx="78" cy="48" r="10" fill="#14141e"/>' +
-    '<circle cx="75" cy="45" r="3.5" fill="#fff"/></g></g>' +
-    '<ellipse class="ob-lid" cx="42" cy="48" rx="11" ry="11" fill="#d8ecfd"/>' +
-    '<ellipse class="ob-lid" cx="78" cy="48" rx="11" ry="11" fill="#d8ecfd"/>' +
-    '<ellipse cx="27" cy="62" rx="6" ry="4" fill="#ffb3c1" opacity="0.55"/>' +
-    '<ellipse cx="93" cy="62" rx="6" ry="4" fill="#ffb3c1" opacity="0.55"/>' +
-    '<path d="M50 60 q5 6 10 0 q5 6 10 0" stroke="#7a5c48" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
-    '</svg>' +
-    '<div class="ob-zzz"><span>z</span><span>Z</span><span>z</span></div>' +
-    '<div class="ob-bubble"></div>' +
-    '</div></div>';
-  document.documentElement.appendChild(pet);
+  var tiltEl = null, looks = [], bubble = null, bubbleTimer = null;
 
-  var tiltEl = pet.querySelector('.ob-tilt');
-  var looks = pet.querySelectorAll('.ob-look');
-  var bubble = pet.querySelector('.ob-bubble');
-  var bubbleTimer = null;
+  function petDef() {
+    if (window.OCTO_PETS && OCTO_PETS[S.pet]) return OCTO_PETS[S.pet];
+    return OCTO_PETS.octopus;
+  }
+
+  function renderPet() {
+    var key = (window.OCTO_PETS && OCTO_PETS[S.pet]) ? S.pet : 'octopus';
+    pet.classList.remove('pet-octopus', 'pet-bee', 'pet-lizard', 'pet-duck');
+    pet.classList.add('pet-' + key);
+    pet.innerHTML =
+      '<div class="ob-tilt"><div class="ob-bob">' + petDef().svg +
+      '<div class="ob-zzz"><span>z</span><span>Z</span><span>z</span></div>' +
+      '<div class="ob-bubble"></div>' +
+      '</div></div>';
+    tiltEl = pet.querySelector('.ob-tilt');
+    looks = pet.querySelectorAll('.ob-look');
+    bubble = pet.querySelector('.ob-bubble');
+  }
+
+  document.documentElement.appendChild(pet);
+  renderPet();
 
   function showBubble(text, ms) {
+    if (!bubble) return;
     bubble.textContent = text;
     bubble.classList.add('show');
     if (bubbleTimer) clearTimeout(bubbleTimer);
@@ -67,13 +60,9 @@
   }
 
   pet.addEventListener('click', function () {
-    var lines = [
-      "Hi! I'm " + S.name + '!',
-      'Yay! You found me!',
-      'Hehe! That tickles!',
-      'I love this page!'
-    ];
-    showBubble(lines[Math.floor(Math.random() * lines.length)], 1800);
+    var d = petDef();
+    var line = d.lines[Math.floor(Math.random() * d.lines.length)];
+    showBubble(line.replace('{name}', S.name), 1800);
     burstHearts();
     pet.classList.add('ob-happy', 'ob-jump');
     setTimeout(function () { pet.classList.remove('ob-happy', 'ob-jump'); }, 900);
@@ -110,7 +99,7 @@
       lastHop = Date.now();
     }
     pet.style.transform = 'translate(' + Math.round(x + 18) + 'px,' + Math.round(y + 14) + 'px)';
-    tiltEl.style.transform = 'rotate(' + tilt.toFixed(1) + 'deg)';
+    if (tiltEl) tiltEl.style.transform = 'rotate(' + tilt.toFixed(1) + 'deg)';
     if (Date.now() - lastMove > 20000) pet.classList.add('sleeping');
     requestAnimationFrame(frame);
   }
@@ -119,12 +108,16 @@
   function loadSettings() {
     try {
       chrome.storage.sync.get(DEF, function (items) {
+        var oldPet = S.pet;
         S = Object.assign({}, DEF, items);
+        if (S.pet !== oldPet) renderPet();
         applySettings();
       });
       chrome.storage.onChanged.addListener(function (changes, area) {
         if (area !== 'sync') return;
+        var petChanged = changes.pet && changes.pet.newValue !== S.pet;
         Object.keys(changes).forEach(function (k) { S[k] = changes[k].newValue; });
+        if (petChanged) renderPet();
         applySettings();
       });
     } catch (e) { applySettings(); }

@@ -113,3 +113,60 @@
   pointer-events: none;
 }
 #octobuddy-pet .ob-bubble.show { opacity: 1; }
+
+/* ---- v2.0.0: per-pet motion (each pet moves the way the real thing does) ---- */
+/* Bee: fast hover + flapping wings + wiggling antennae */
+#octobuddy-pet.pet-bee .ob-bob { animation: obHover 0.9s ease-in-out infinite; }
+#octobuddy-pet.pet-bee.sleeping .ob-bob { animation-duration: 4s; }
+@keyframes obHover {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+#octobuddy-pet .ob-wing {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: obFlap 0.16s ease-in-out infinite alternate;
+}
+#octobuddy-pet .ob-wing-r { animation-delay: 0.08s; }
+@keyframes obFlap {
+  from { transform: rotate(-18deg) scaleY(1); }
+  to { transform: rotate(18deg) scaleY(0.6); }
+}
+#octobuddy-pet .ob-antenna {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: obWiggle 1.6s ease-in-out infinite alternate;
+}
+@keyframes obWiggle {
+  from { transform: rotate(-8deg); }
+  to { transform: rotate(8deg); }
+}
+/* Lizard: slow float + swaying tail + tongue flick every ~7s */
+#octobuddy-pet.pet-lizard .ob-bob { animation-duration: 4s; }
+#octobuddy-pet .ob-tail {
+  transform-box: fill-box;
+  transform-origin: bottom right;
+  animation: obTailSway 2.6s ease-in-out infinite alternate;
+}
+@keyframes obTailSway {
+  from { transform: rotate(-7deg); }
+  to { transform: rotate(9deg); }
+}
+#octobuddy-pet .ob-tongue { opacity: 0; animation: obTongue 7s infinite; }
+@keyframes obTongue {
+  0%, 92%, 100% { opacity: 0; }
+  94%, 96% { opacity: 1; }
+}
+/* MicroDuck robot: stepped, ticking head tilt (robotic, not smooth) */
+#octobuddy-pet.pet-duck .ob-bob { animation-duration: 2.8s; }
+#octobuddy-pet .ob-duckhead {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: obDuckHead 2.4s steps(4) infinite;
+}
+@keyframes obDuckHead {
+  from { transform: rotate(-4deg); }
+  to { transform: rotate(4deg); }
+}
+/* Jump must win over per-pet float while it plays */
+#octobuddy-pet.ob-jump .ob-bob { animation: obJump 0.6s ease; }

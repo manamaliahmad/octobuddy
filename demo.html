@@ -19,59 +19,55 @@
   .feat b { display: block; margin-bottom: 2px; }
   #fakeCursor { position: fixed; left: 0; top: 0; z-index: 2147483646; font-size: 26px; pointer-events: none; line-height: 1; }
   .note { margin-top: 26px; font-size: 13px; }
+  .petbtn.sel { background: #eaf4ff; border-color: #9cc8ef; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>OctoBuddy — Live Demo</h1>
-  <p>The same pet from the extension, running right here. Watch it follow the
-  arrow, blink, hop when it catches up, and fall asleep if the arrow stops.</p>
+  <p>The same pets from the extension, running right here. Pick one below and
+  watch it follow the arrow, blink, hop when it catches up, and fall asleep
+  if the arrow stops.</p>
   <div class="btns">
     <button class="dark" id="btnAuto">Auto demo: ON</button>
     <button class="light" id="btnMouse">Use my mouse</button>
     <button class="light" id="btnSleep">Make it sleep (20s)</button>
   </div>
+  <div class="btns">
+    <button class="light petbtn sel" data-pet="octopus">🐙 Octopus</button>
+    <button class="light petbtn" data-pet="bee">🐝 Bee</button>
+    <button class="light petbtn" data-pet="lizard">🦎 Lizard</button>
+    <button class="light petbtn" data-pet="duck">🤖 MicroDuck</button>
+  </div>
   <div class="feats">
     <div class="feat"><b>Follows the cursor</b>Smooth easing + pupils that look toward it.</div>
-    <div class="feat"><b>Alive</b>Blinking eyes, swaying tentacles, bobbing float, tilt.</div>
+    <div class="feat"><b>Alive</b>Blinking eyes, flapping bee wings, wagging lizard tail, ticking robot head — 4 pets, each with its own moves.</div>
     <div class="feat"><b>Idle sleep</b>20s still → Zzz mode. Move to wake it.</div>
     <div class="feat"><b>Click love</b>Click the pet → jump + hearts + bubble.</div>
   </div>
   <p class="note">To install the real thing: unzip the extension folder → chrome://extensions → Developer mode → Load unpacked.</p>
 </div>
 <div id="fakeCursor">&#10132;</div>
+<script src="pets.js"></script>
 <script>
   // Standalone demo: same pet markup as content.js, driven by a fake auto cursor
   // (or the real mouse). No Chrome APIs, no install needed.
   var pet = document.createElement('div');
   pet.id = 'octobuddy-pet';
   pet.style.width = '100px';
-  pet.innerHTML =
-    '<div class="ob-tilt"><div class="ob-bob">' +
-    '<svg viewBox="0 0 120 112" xmlns="http://www.w3.org/2000/svg">' +
-    '<defs><linearGradient id="obHead" x1="0" y1="0" x2="0" y2="1">' +
-    '<stop offset="0%" stop-color="#ffffff"/><stop offset="45%" stop-color="#eaf4ff"/>' +
-    '<stop offset="100%" stop-color="#a8d0f2"/></linearGradient></defs>' +
-    '<g class="ob-tent" stroke="#9cc8ef" stroke-width="13" stroke-linecap="round" fill="none">' +
-    '<path d="M18 66 Q10 86 16 100"/><path d="M38 72 Q32 92 38 104"/>' +
-    '<path d="M60 74 Q60 94 60 106"/><path d="M82 72 Q88 92 82 104"/>' +
-    '<path d="M102 66 Q110 86 104 100"/></g>' +
-    '<path d="M10 62 C10 26 30 12 60 12 C90 12 110 26 110 62 C110 70 104 72 100 68 ' +
-    'C96 74 88 74 84 68 C80 74 72 74 68 68 C64 74 56 74 52 68 C48 74 40 74 36 68 ' +
-    'C32 74 24 74 20 68 C16 72 10 70 10 62 Z" fill="url(#obHead)"/>' +
-    '<g class="ob-eye"><g class="ob-look"><circle cx="42" cy="48" r="10" fill="#14141e"/>' +
-    '<circle cx="39" cy="45" r="3.5" fill="#fff"/></g></g>' +
-    '<g class="ob-eye"><g class="ob-look"><circle cx="78" cy="48" r="10" fill="#14141e"/>' +
-    '<circle cx="75" cy="45" r="3.5" fill="#fff"/></g></g>' +
-    '<ellipse class="ob-lid" cx="42" cy="48" rx="11" ry="11" fill="#d8ecfd"/>' +
-    '<ellipse class="ob-lid" cx="78" cy="48" rx="11" ry="11" fill="#d8ecfd"/>' +
-    '<ellipse cx="27" cy="62" rx="6" ry="4" fill="#ffb3c1" opacity="0.55"/>' +
-    '<ellipse cx="93" cy="62" rx="6" ry="4" fill="#ffb3c1" opacity="0.55"/>' +
-    '<path d="M50 60 q5 6 10 0 q5 6 10 0" stroke="#7a5c48" stroke-width="1.8" fill="none" stroke-linecap="round"/>' +
-    '</svg>' +
-    '<div class="ob-zzz"><span>z</span><span>Z</span><span>z</span></div>' +
-    '<div class="ob-bubble"></div>' +
-    '</div></div>';
+  var currentPet = 'octopus';
+  function renderDemoPet(key) {
+    currentPet = key;
+    var d = OCTO_PETS[key];
+    pet.classList.remove('pet-octopus', 'pet-bee', 'pet-lizard', 'pet-duck');
+    pet.classList.add('pet-' + key);
+    pet.innerHTML =
+      '<div class="ob-tilt"><div class="ob-bob">' + d.svg +
+      '<div class="ob-zzz"><span>z</span><span>Z</span><span>z</span></div>' +
+      '<div class="ob-bubble"></div>' +
+      '</div></div>';
+  }
+  renderDemoPet('octopus');
   document.body.appendChild(pet);
 
   var tiltEl = pet.querySelector('.ob-tilt');
@@ -88,8 +84,13 @@
     if (bubbleTimer) clearTimeout(bubbleTimer);
     bubbleTimer = setTimeout(function () { bubble.classList.remove('show'); }, ms || 1800);
   }
+  function petLine() {
+    var d = OCTO_PETS[currentPet];
+    var l = d.lines[Math.floor(Math.random() * d.lines.length)];
+    return l.replace('{name}', d.defaultName);
+  }
   pet.addEventListener('click', function () {
-    showBubble("Hi! I'm Ollie!", 1800);
+    showBubble(petLine(), 1800);
     for (var i = 0; i < 5; i++) {
       (function () {
         var h = document.createElement('span');
@@ -118,6 +119,16 @@
   document.getElementById('btnSleep').addEventListener('click', function () {
     sleepMode = true; lastMove = Date.now() - 1000;
     showBubble('Shhh... sleepy time', 2000);
+  });
+  document.querySelectorAll('.petbtn').forEach(function (b) {
+    b.addEventListener('click', function () {
+      renderDemoPet(b.getAttribute('data-pet'));
+      tiltEl = pet.querySelector('.ob-tilt');
+      looks = pet.querySelectorAll('.ob-look');
+      bubble = pet.querySelector('.ob-bubble');
+      document.querySelectorAll('.petbtn').forEach(function (x) { x.classList.toggle('sel', x === b); });
+      lastMove = Date.now(); pet.classList.remove('sleeping');
+    });
   });
 
   function frame() {
@@ -150,7 +161,7 @@
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
-  setTimeout(function () { showBubble("Hi! I'm Ollie!", 2400); }, 1500);
+  setTimeout(function () { showBubble(petLine(), 2400); }, 1500);
 </script>
 </body>
 </html>
