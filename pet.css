@@ -157,13 +157,16 @@
   0%, 92%, 100% { opacity: 0; }
   94%, 96% { opacity: 1; }
 }
-/* MicroDuck robot: stepped, ticking head tilt (robotic, not smooth) */
+/* MicroDuck robot: the real photo (cutout) — head+neck tilts in robotic steps */
 #octobuddy-pet.pet-duck .ob-bob { animation-duration: 2.8s; }
-#octobuddy-pet .ob-duckhead {
-  transform-box: fill-box;
-  transform-origin: bottom center;
+#octobuddy-pet .ob-duckphoto { position: relative; width: 100%; aspect-ratio: 1 / 1; }
+#octobuddy-pet .ob-duckphoto img { position: absolute; left: 0; width: 100%; height: auto; }
+#octobuddy-pet .ob-duckhead-img {
+  top: 0;
+  transform-origin: 50% 100%;
   animation: obDuckHead 2.4s steps(4) infinite;
 }
+#octobuddy-pet .ob-duckbody-img { top: 46%; }
 @keyframes obDuckHead {
   from { transform: rotate(-4deg); }
   to { transform: rotate(4deg); }

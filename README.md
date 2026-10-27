@@ -11,7 +11,12 @@ when you click them. Pick your pet in the popup — no reinstall needed.
 - **🐙 Octopus (Ollie)** — the original: swaying tentacles, bobbing float
 - **🐝 Bee (Buzzie)** — flapping wings, wiggling antennae, fast hover
 - **🦎 Lizard (Lizzy)** — swaying tail, giant eyes, tongue flick every few seconds
-- **🤖 MicroDuck robot (Ducky)** — ticking robot head tilt, camera eye, orange beak and feet
+- **🤖 MicroDuck robot (Ducky)** — the real MicroDuck photo itself (background
+  cut out), head+neck tilts in robotic steps
+
+v2.0.1 update: MicroDuck now uses the actual product photo instead of a
+drawing — it looks exactly like the real robot. (The other three pets are
+still SVG drawings in the style of their photos, so their parts can move.)
 
 Every pet is drawn in SVG in the style of its reference photo, so every part
 can move — a flat photo can't flap wings or wag a tail. Switch pets anytime
